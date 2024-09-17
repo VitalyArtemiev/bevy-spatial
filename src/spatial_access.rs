@@ -71,3 +71,14 @@ pub trait SpatialAABBAccess: SpatialAccess {
         loc2: <Self::Point as SpatialPoint>::Vec,
     ) -> Vec<Self::ResultT>;
 }
+
+pub trait SpatialRectAccess: SpatialAccess {
+    /// Return all points which are within a rectangular region defined by DIM+1 points.
+    fn within_rect(
+        &self,
+        loc1: <Self::Point as SpatialPoint>::Vec,
+        loc2: <Self::Point as SpatialPoint>::Vec,
+        loc3: <Self::Point as SpatialPoint>::Vec,
+        loc4: <Self::Point as SpatialPoint>::Vec,
+    ) -> Vec<Self::ResultT>;
+}

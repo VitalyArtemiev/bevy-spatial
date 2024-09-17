@@ -71,6 +71,37 @@ macro_rules! kdtree_impl {
             }
         }
 
+        impl<Comp> SpatialRectAccess for $treename<Comp>
+        where
+            Comp: TComp,
+        {
+            /// Return all points which are within a rectangular region defined by DIM+1 points.
+            fn within(
+                &self,
+                loc1: <Self::Point as SpatialPoint>::Vec,
+                loc2: <Self::Point as SpatialPoint>::Vec,
+                loc3: <Self::Point as SpatialPoint>::Vec,
+                loc4: <Self::Point as SpatialPoint>::Vec,
+            ) -> Vec<Self::ResultT> {
+                let _span = info_span!("within").entered();
+
+                let p1: $pt = loc1.min(loc2).into();
+                let p2: $pt = loc1.max(loc2).into();
+
+                let rect = [p1, p2];
+
+                if self.tree.len() == 0 {
+                    vec![]
+                } else {
+                    self.tree
+                        .within(&rect)
+                        .iter()
+                        .map(|e| (e.vec(), e.entity()))
+                        .collect()
+                }
+            }
+        }
+
         impl<Comp> SpatialAccess for $treename<Comp>
         where
             Comp: TComp,
